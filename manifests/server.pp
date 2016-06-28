@@ -54,6 +54,9 @@ class postgresql::server (
   $manage_pg_ident_conf       = $postgresql::params::manage_pg_ident_conf,
   $manage_recovery_conf       = $postgresql::params::manage_recovery_conf,
   $module_workdir             = $postgresql::params::module_workdir,
+
+  $remote_only                = $postgresql::params::remote_only,
+
   #Deprecated
   $version                    = undef,
 ) inherits postgresql::params {
@@ -70,14 +73,19 @@ class postgresql::server (
     warning('Passing "createdb_path" to postgresql::server is deprecated, it can be removed safely for the same behaviour')
   }
 
-  # Reload has its own ordering, specified by other defines
-  class { "${pg}::reload": require => Class["${pg}::install"] }
+  if ! $remote_only {
 
-  anchor { "${pg}::start": }->
-  class { "${pg}::install": }->
-  class { "${pg}::initdb": }->
-  class { "${pg}::config": }->
-  class { "${pg}::service": }->
-  class { "${pg}::passwd": }->
-  anchor { "${pg}::end": }
+    # Reload has its own ordering, specified by other defines
+    class { "${pg}::reload": require => Class["${pg}::install"] }
+
+    anchor { "${pg}::start": }->
+    class { "${pg}::install": }->
+    class { "${pg}::initdb": }->
+    class { "${pg}::config": }->
+    class { "${pg}::service": }->
+    class { "${pg}::passwd": }->
+    anchor { "${pg}::end": }
+
+  }
+
 }
