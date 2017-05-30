@@ -74,6 +74,9 @@ class postgresql::server (
     warning('Passing "createdb_path" to postgresql::server is deprecated, it can be removed safely for the same behaviour')
   }
 
+  # Reload has its own ordering, specified by other defines
+  class { "${pg}::reload": require => Class["${pg}::install"] }
+
   if ! $remote_only {
 
     # Reload has its own ordering, specified by other defines
