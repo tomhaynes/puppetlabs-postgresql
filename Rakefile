@@ -1,9 +1,10 @@
-require 'puppetlabs_spec_helper/rake_tasks'
+require 'puppet_blacksmith/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
-require 'puppet_blacksmith/rake_tasks' if Bundler.rubygems.find_name('puppet-blacksmith').any?
+require 'puppetlabs_spec_helper/rake_tasks'
 
-PuppetLint.configuration.fail_on_warnings = true
 PuppetLint.configuration.send('relative')
+PuppetLint.configuration.send('disable_documentation')
+PuppetLint.configuration.send('disable_single_quote_string_with_variables')
 
 desc 'Generate pooler nodesets'
 task :gen_nodeset do

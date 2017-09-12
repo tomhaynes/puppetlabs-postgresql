@@ -9,7 +9,7 @@ describe provider_class do
     conf_class = Puppet::Type.type(:postgresql_conf)
     provider = conf_class.provider(:parsed)
     conffile = tmpfilename('postgresql.conf')
-    allow_any_instance_of(provider).to receive(:target).and_return conffile
+    provider.any_instance.stub(:target).and_return conffile
     provider
   }
 

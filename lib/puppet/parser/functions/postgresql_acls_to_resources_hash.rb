@@ -30,7 +30,7 @@ module Puppet::Parser::Functions
 
     offset = args[2].to_i
     raise(Puppet::ParseError, "#{func_name}: third argument must be a number") \
-      unless offset.is_a? Integer
+      unless offset.instance_of? Fixnum
 
     resources = {}
     acls.each do |acl|

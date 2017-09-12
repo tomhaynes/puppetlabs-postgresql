@@ -1,14 +1,12 @@
 # This class installs postgresql development libraries. See README.md for more
 # details.
 class postgresql::lib::devel(
-  String $package_name      = $postgresql::params::devel_package_name,
-  String[1] $package_ensure = 'present',
-  Boolean $link_pg_config   = $postgresql::params::link_pg_config
+  $package_name   = $postgresql::params::devel_package_name,
+  $package_ensure = 'present',
+  $link_pg_config = $postgresql::params::link_pg_config
 ) inherits postgresql::params {
 
-  if $::osfamily == 'Gentoo' {
-    fail('osfamily Gentoo does not have a separate "devel" package, postgresql::lib::devel is not supported')
-  }
+  validate_string($package_name)
 
   package { 'postgresql-devel':
     ensure => $package_ensure,

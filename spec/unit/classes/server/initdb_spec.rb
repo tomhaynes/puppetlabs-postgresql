@@ -14,7 +14,6 @@ describe 'postgresql::server::initdb', :type => :class do
         :kernel => 'Linux',
         :id => 'root',
         :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        :selinux => true,
       }
     end
     it { is_expected.to contain_file('/var/lib/pgsql/data').with_ensure('directory') }
@@ -29,7 +28,6 @@ describe 'postgresql::server::initdb', :type => :class do
         :kernel => 'Linux',
         :id => 'root',
         :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        :selinux => true,
       }
     end
     it { is_expected.to contain_file('/var/lib/pgsql92/data').with_ensure('directory') }
@@ -45,7 +43,6 @@ describe 'postgresql::server::initdb', :type => :class do
         :kernel => 'Linux',
         :id => 'root',
         :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        :selinux => true,
       }
     end
     let (:pre_condition) do
@@ -74,7 +71,6 @@ describe 'postgresql::server::initdb', :type => :class do
         :kernel => 'Linux',
         :id => 'root',
         :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        :selinux => true,
       }
     end
     let (:pre_condition) do
@@ -103,7 +99,6 @@ describe 'postgresql::server::initdb', :type => :class do
         :kernel => 'Linux',
         :id => 'root',
         :path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        :selinux => true,
       }
     end
 

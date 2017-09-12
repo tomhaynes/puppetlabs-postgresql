@@ -3,6 +3,7 @@ class postgresql::server (
   $postgres_password          = undef,
 
   $package_name               = $postgresql::params::server_package_name,
+  $client_package_name        = $postgresql::params::client_package_name,
   $package_ensure             = $postgresql::params::package_ensure,
 
   $plperl_package_name        = $postgresql::params::plperl_package_name,
@@ -48,8 +49,6 @@ class postgresql::server (
 
   $encoding                   = $postgresql::params::encoding,
   $locale                     = $postgresql::params::locale,
-  $data_checksums             = $postgresql::params::data_checksums,
-  $timezone                   = $postgresql::params::timezone,
 
   $manage_pg_hba_conf         = $postgresql::params::manage_pg_hba_conf,
   $manage_pg_ident_conf       = $postgresql::params::manage_pg_ident_conf,
@@ -79,13 +78,13 @@ class postgresql::server (
     # Reload has its own ordering, specified by other defines
     class { "${pg}::reload": require => Class["${pg}::install"] }
 
-    anchor { "${pg}::start": }
-    -> class { "${pg}::install": }
-    -> class { "${pg}::initdb": }
-    -> class { "${pg}::config": }
-    -> class { "${pg}::service": }
-    -> class { "${pg}::passwd": }
-    -> anchor { "${pg}::end": }
+    anchor { "${pg}::start": }->
+    class { "${pg}::install": }->
+    class { "${pg}::initdb": }->
+    class { "${pg}::config": }->
+    class { "${pg}::service": }->
+    class { "${pg}::passwd": }->
+    anchor { "${pg}::end": }
 
   }
 

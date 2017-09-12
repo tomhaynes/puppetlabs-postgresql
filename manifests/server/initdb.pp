@@ -7,7 +7,6 @@ class postgresql::server::initdb {
   $logdir         = $postgresql::server::logdir
   $encoding       = $postgresql::server::encoding
   $locale         = $postgresql::server::locale
-  $data_checksums = $postgresql::server::data_checksums
   $group          = $postgresql::server::group
   $user           = $postgresql::server::user
   $psql_path      = $postgresql::server::psql_path
@@ -23,43 +22,30 @@ class postgresql::server::initdb {
     cwd        => $module_workdir,
   }
 
-  if $::osfamily == 'RedHat' and $::selinux == true {
-    $seltype = 'postgresql_db_t'
-    $logdir_type = 'postgresql_log_t'
-  }
-
-  else {
-    $seltype = undef
-    $logdir_type = undef
-  }
-
   # Make sure the data directory exists, and has the correct permissions.
   file { $datadir:
-    ensure  => directory,
-    owner   => $user,
-    group   => $group,
-    mode    => '0700',
-    seltype => $seltype,
+    ensure => directory,
+    owner  => $user,
+    group  => $group,
+    mode   => '0700',
   }
 
   if($xlogdir) {
     # Make sure the xlog directory exists, and has the correct permissions.
     file { $xlogdir:
-      ensure  => directory,
-      owner   => $user,
-      group   => $group,
-      mode    => '0700',
-      seltype => $seltype,
+      ensure => directory,
+      owner  => $user,
+      group  => $group,
+      mode   => '0700',
     }
   }
 
   if($logdir) {
     # Make sure the log directory exists, and has the correct permissions.
     file { $logdir:
-      ensure  => directory,
-      owner   => $user,
-      group   => $group,
-      seltype => $logdir_type,
+      ensure => directory,
+      owner  => $user,
+      group  => $group,
     }
   }
 
@@ -83,15 +69,9 @@ class postgresql::server::initdb {
       $require_before_initdb = [$datadir]
     }
 
-    $ic_locale = $locale ? {
+    $initdb_command = $locale ? {
       undef   => $ic_xlog,
       default => "${ic_xlog} --locale '${locale}'"
-    }
-
-    $initdb_command = $data_checksums ? {
-      undef   => $ic_locale,
-      false   => $ic_locale,
-      default => "${ic_locale} --data-checksums"
     }
 
     # This runs the initdb command, we use the existance of the PG_VERSION
